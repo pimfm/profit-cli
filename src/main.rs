@@ -62,9 +62,23 @@ async fn main() -> Result<()> {
 }
 
 async fn run_app(terminal: &mut Terminal<CrosstermBackend<std::io::Stdout>>) -> Result<()> {
-    let mut app = match load_config() {
-        Some(cfg) => App::from_config(cfg),
-        None => App::new(),
+    let simulate = std::env::args().any(|a| a == "--simulate");
+
+    let mut app = if simulate {
+        let cfg = AppConfig {
+            currency: "EUR".to_string(),
+            currency_symbol: "€".to_string(),
+            providers: vec![PspConfig {
+                provider: "Mock".to_string(),
+                api_key: String::new(),
+            }],
+        };
+        App::from_config(cfg)
+    } else {
+        match load_config() {
+            Some(cfg) => App::from_config(cfg),
+            None => App::new(),
+        }
     };
 
     let (tx, mut rx) = mpsc::unbounded_channel::<Vec<psp::Payment>>();

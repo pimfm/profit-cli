@@ -19,7 +19,7 @@ impl PaymentProvider for MockProvider {
 
     async fn fetch_recent_payments(&self, _since: chrono::DateTime<chrono::Utc>) -> Result<Vec<Payment>> {
         let mut rng = rand::thread_rng();
-        let amount_units: i64 = rng.gen_range(3..=15);
+        let amount_units: i64 = rng.gen_range(2..=15);
         let amount_cents = amount_units * 100;
 
         let payment = Payment {
