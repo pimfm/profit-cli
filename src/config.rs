@@ -16,7 +16,10 @@ impl Default for AppConfig {
         Self {
             currency: "EUR".to_string(),
             currency_symbol: "€".to_string(),
-            providers: Vec::new(),
+            providers: vec![PspConfig {
+                provider: "Mock".to_string(),
+                api_key: String::new(),
+            }],
         }
     }
 }

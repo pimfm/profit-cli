@@ -24,9 +24,6 @@ fn build_providers(configs: &[PspConfig]) -> Vec<Arc<dyn PaymentProvider>> {
             "Mock" => {
                 providers.push(Arc::new(psp::mock::MockProvider::new()));
             }
-            "Mollie" => {
-                providers.push(Arc::new(psp::mollie::MollieProvider::new(cfg.api_key.clone())));
-            }
             "Adyen" => {
                 // Adyen needs merchant account — stored as "key|merchant"
                 let parts: Vec<&str> = cfg.api_key.splitn(2, '|').collect();

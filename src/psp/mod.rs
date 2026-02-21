@@ -1,4 +1,3 @@
-pub mod mollie;
 pub mod adyen;
 pub mod mock;
 
