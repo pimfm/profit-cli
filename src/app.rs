@@ -71,7 +71,7 @@ pub const CURRENCIES: &[(&str, &str)] = &[
     ("AUD", "A$"),
 ];
 
-pub const PROVIDERS: &[&str] = &["Mollie", "Adyen"];
+pub const PROVIDERS: &[&str] = &["Mock", "Mollie", "Adyen"];
 
 impl App {
     pub fn new() -> Self {

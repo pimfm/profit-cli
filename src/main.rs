@@ -21,6 +21,9 @@ fn build_providers(configs: &[PspConfig]) -> Vec<Arc<dyn PaymentProvider>> {
     let mut providers: Vec<Arc<dyn PaymentProvider>> = Vec::new();
     for cfg in configs {
         match cfg.provider.as_str() {
+            "Mock" => {
+                providers.push(Arc::new(psp::mock::MockProvider::new()));
+            }
             "Mollie" => {
                 providers.push(Arc::new(psp::mollie::MollieProvider::new(cfg.api_key.clone())));
             }
@@ -218,8 +221,8 @@ fn handle_setup_input(app: &mut App, key: KeyCode) -> bool {
                 KeyCode::Enter => {
                     let any_enabled = app.provider_configs.iter().any(|p| p.enabled);
                     if any_enabled {
-                        // Find first enabled provider that needs API key
-                        if let Some(idx) = app.provider_configs.iter().position(|p| p.enabled && p.api_key.is_empty()) {
+                        // Find first enabled provider that needs API key (Mock doesn't)
+                        if let Some(idx) = app.provider_configs.iter().position(|p| p.enabled && p.name != "Mock" && p.api_key.is_empty()) {
                             app.current_provider_idx = idx;
                             app.setup_input.clear();
                             app.setup_step = SetupStep::ProviderApiKey;
@@ -314,7 +317,7 @@ fn handle_setup_input(app: &mut App, key: KeyCode) -> bool {
 
 fn advance_to_next_provider_or_confirm(app: &mut App) {
     let start = app.current_provider_idx + 1;
-    if let Some(idx) = app.provider_configs[start..].iter().position(|p| p.enabled && p.api_key.is_empty()) {
+    if let Some(idx) = app.provider_configs[start..].iter().position(|p| p.enabled && p.name != "Mock" && p.api_key.is_empty()) {
         app.current_provider_idx = start + idx;
         app.setup_input.clear();
         app.setup_step = SetupStep::ProviderApiKey;

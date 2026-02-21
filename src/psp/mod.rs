@@ -1,5 +1,6 @@
 pub mod mollie;
 pub mod adyen;
+pub mod mock;
 
 use anyhow::Result;
 use async_trait::async_trait;
